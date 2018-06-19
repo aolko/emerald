@@ -1,0 +1,5 @@
+b = 2;
+c = 5 + 5 * b;
+d = 133 * c - b;
+print b;
+print c;
