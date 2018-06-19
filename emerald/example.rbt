@@ -1,5 +1,15 @@
-b = 2;
-c = 5 + 5 * b;
-d = 133 * c - b;
-print b;
-print c;
+# factorial
+// also valid
+/*
+multiline
+*/
+
+def fact(n):
+  if n == 0:
+    1
+  else:
+    n * fact(n-1)
+  end
+end
+
+puts fact(ARGV[0].to_i)
