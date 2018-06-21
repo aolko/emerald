@@ -584,12 +584,12 @@ class rubitoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by rubitoParser#id.
-    def enterId(self, ctx:rubitoParser.IdContext):
+    # Enter a parse tree produced by rubitoParser#id_decl.
+    def enterId_decl(self, ctx:rubitoParser.Id_declContext):
         pass
 
-    # Exit a parse tree produced by rubitoParser#id.
-    def exitId(self, ctx:rubitoParser.IdContext):
+    # Exit a parse tree produced by rubitoParser#id_decl.
+    def exitId_decl(self, ctx:rubitoParser.Id_declContext):
         pass
 
 

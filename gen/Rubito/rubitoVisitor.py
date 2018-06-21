@@ -329,8 +329,8 @@ class rubitoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by rubitoParser#id.
-    def visitId(self, ctx:rubitoParser.IdContext):
+    # Visit a parse tree produced by rubitoParser#id_decl.
+    def visitId_decl(self, ctx:rubitoParser.Id_declContext):
         return self.visitChildren(ctx)
 
 

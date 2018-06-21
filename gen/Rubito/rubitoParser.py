@@ -429,7 +429,7 @@ class rubitoParser ( Parser ):
                       "BIT_AND", "BIT_OR", "BIT_XOR", "BIT_NOT", "BIT_SHL", 
                       "BIT_SHR", "AND", "OR", "NOT", "LEFT_RBRACKET", "RIGHT_RBRACKET", 
                       "LEFT_SBRACKET", "RIGHT_SBRACKET", "NIL", "SL_COMMENT", 
-                      "ML_COMMENT", "WS", "INT", "FLOAT", "ID", "ID_GLOBAL", 
+                      "ML_COMMENT", "WS", "INT", "FLOAT", "IDDECL", "ID_GLOBAL", 
                       "ID_FUNCTION" ]
 
     RULE_prog = 0
@@ -496,7 +496,7 @@ class rubitoParser ( Parser ):
     RULE_int_t = 61
     RULE_bool_t = 62
     RULE_nil_t = 63
-    RULE_id = 64
+    RULE_id_decl = 64
     RULE_id_global = 65
     RULE_id_function = 66
     RULE_terminator = 67
@@ -522,7 +522,7 @@ class rubitoParser ( Parser ):
                    "dynamic_result", "dynamic", "int_result", "float_result", 
                    "string_result", "comparison_list", "comparison", "comp_var", 
                    "lvalue", "rvalue", "break_expression", "literal_t", 
-                   "float_t", "int_t", "bool_t", "nil_t", "id", "id_global", 
+                   "float_t", "int_t", "bool_t", "nil_t", "id_decl", "id_global", 
                    "id_function", "terminator", "else_token", "crlf" ]
 
     EOF = Token.EOF
@@ -582,7 +582,7 @@ class rubitoParser ( Parser ):
     WS=54
     INT=55
     FLOAT=56
-    ID=57
+    IDDECL=57
     ID_GLOBAL=58
     ID_FUNCTION=59
 
@@ -689,7 +689,7 @@ class rubitoParser ( Parser ):
             self.state = 147
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.ID, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
+            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.IDDECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
                 self.state = 143
                 self.expression()
                 self.state = 144
@@ -1322,8 +1322,8 @@ class rubitoParser ( Parser ):
             return self.getTypedRuleContext(rubitoParser.Id_functionContext,0)
 
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def getRuleIndex(self):
@@ -1359,10 +1359,10 @@ class rubitoParser ( Parser ):
                 self.state = 201
                 self.id_function()
                 pass
-            elif token in [rubitoParser.ID]:
+            elif token in [rubitoParser.IDDECL]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 202
-                self.id()
+                self.id_decl()
                 pass
             else:
                 raise NoViableAltException(self)
@@ -1536,8 +1536,8 @@ class rubitoParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def getRuleIndex(self):
@@ -1567,7 +1567,7 @@ class rubitoParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 225
-            self.id()
+            self.id_decl()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1989,8 +1989,8 @@ class rubitoParser ( Parser ):
             self.parser = parser
             self.op = None # Token
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def ASSIGN(self):
@@ -2039,7 +2039,7 @@ class rubitoParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 267
-            self.id()
+            self.id_decl()
             self.state = 268
             localctx.op = self.match(rubitoParser.ASSIGN)
             self.state = 273
@@ -3294,7 +3294,7 @@ class rubitoParser ( Parser ):
             self.state = 430
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.ID, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
+            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.IDDECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
                 self.state = 422
                 self.expression()
                 self.state = 423
@@ -4153,8 +4153,8 @@ class rubitoParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def LEFT_SBRACKET(self):
@@ -4203,10 +4203,10 @@ class rubitoParser ( Parser ):
             self.state = 543
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.ID]:
+            if token in [rubitoParser.IDDECL]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 527
-                self.id()
+                self.id_decl()
                 self.state = 528
                 self.match(rubitoParser.LEFT_SBRACKET)
                 self.state = 531
@@ -4585,8 +4585,8 @@ class rubitoParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def function_call_assignment(self):
@@ -4628,7 +4628,7 @@ class rubitoParser ( Parser ):
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 599
-                self.id()
+                self.id_decl()
                 pass
 
             elif la_ == 2:
@@ -5393,8 +5393,8 @@ class rubitoParser ( Parser ):
             return self.getTypedRuleContext(rubitoParser.Array_selectorContext,0)
 
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def getRuleIndex(self):
@@ -5440,7 +5440,7 @@ class rubitoParser ( Parser ):
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
                 self.state = 710
-                self.id()
+                self.id_decl()
                 pass
 
 
@@ -5458,8 +5458,8 @@ class rubitoParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def id(self):
-            return self.getTypedRuleContext(rubitoParser.IdContext,0)
+        def id_decl(self):
+            return self.getTypedRuleContext(rubitoParser.Id_declContext,0)
 
 
         def getRuleIndex(self):
@@ -5489,7 +5489,7 @@ class rubitoParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 713
-            self.id()
+            self.id_decl()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -6261,43 +6261,43 @@ class rubitoParser ( Parser ):
             self.exitRule()
         return localctx
 
-    class IdContext(ParserRuleContext):
+    class Id_declContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def ID(self):
-            return self.getToken(rubitoParser.ID, 0)
+        def IDDECL(self):
+            return self.getToken(rubitoParser.IDDECL, 0)
 
         def getRuleIndex(self):
-            return rubitoParser.RULE_id
+            return rubitoParser.RULE_id_decl
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterId" ):
-                listener.enterId(self)
+            if hasattr( listener, "enterId_decl" ):
+                listener.enterId_decl(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitId" ):
-                listener.exitId(self)
+            if hasattr( listener, "exitId_decl" ):
+                listener.exitId_decl(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitId" ):
-                return visitor.visitId(self)
+            if hasattr( visitor, "visitId_decl" ):
+                return visitor.visitId_decl(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def id(self):
+    def id_decl(self):
 
-        localctx = rubitoParser.IdContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 128, self.RULE_id)
+        localctx = rubitoParser.Id_declContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 128, self.RULE_id_decl)
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 787
-            self.match(rubitoParser.ID)
+            self.match(rubitoParser.IDDECL)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

@@ -247,7 +247,7 @@ class rubitoLexer(Lexer):
     WS = 54
     INT = 55
     FLOAT = 56
-    ID = 57
+    IDDECL = 57
     ID_GLOBAL = 58
     ID_FUNCTION = 59
 
@@ -272,7 +272,7 @@ class rubitoLexer(Lexer):
             "DIV_ASSIGN", "MOD_ASSIGN", "EXP_ASSIGN", "BIT_AND", "BIT_OR", 
             "BIT_XOR", "BIT_NOT", "BIT_SHL", "BIT_SHR", "AND", "OR", "NOT", 
             "LEFT_RBRACKET", "RIGHT_RBRACKET", "LEFT_SBRACKET", "RIGHT_SBRACKET", 
-            "NIL", "SL_COMMENT", "ML_COMMENT", "WS", "INT", "FLOAT", "ID", 
+            "NIL", "SL_COMMENT", "ML_COMMENT", "WS", "INT", "FLOAT", "IDDECL", 
             "ID_GLOBAL", "ID_FUNCTION" ]
 
     ruleNames = [ "ESCAPED_QUOTE", "LITERAL", "COMMA", "SEMICOLON", "CRLF", 
@@ -285,7 +285,7 @@ class rubitoLexer(Lexer):
                   "BIT_XOR", "BIT_NOT", "BIT_SHL", "BIT_SHR", "AND", "OR", 
                   "NOT", "LEFT_RBRACKET", "RIGHT_RBRACKET", "LEFT_SBRACKET", 
                   "RIGHT_SBRACKET", "NIL", "SL_COMMENT", "ML_COMMENT", "WS", 
-                  "INT", "FLOAT", "ID", "ID_GLOBAL", "ID_FUNCTION" ]
+                  "INT", "FLOAT", "IDDECL", "ID_GLOBAL", "ID_FUNCTION" ]
 
     grammarFileName = "rubito.g4"
 
