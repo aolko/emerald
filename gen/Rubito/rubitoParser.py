@@ -2,7 +2,7 @@
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
-from typing.io import TextIO
+import typing
 import sys
 
 def serializedATN():
@@ -429,7 +429,7 @@ class rubitoParser ( Parser ):
                       "BIT_AND", "BIT_OR", "BIT_XOR", "BIT_NOT", "BIT_SHL", 
                       "BIT_SHR", "AND", "OR", "NOT", "LEFT_RBRACKET", "RIGHT_RBRACKET", 
                       "LEFT_SBRACKET", "RIGHT_SBRACKET", "NIL", "SL_COMMENT", 
-                      "ML_COMMENT", "WS", "INT", "FLOAT", "IDDECL", "ID_GLOBAL", 
+                      "ML_COMMENT", "WS", "INT", "FLOAT", "ID_DECL", "ID_GLOBAL", 
                       "ID_FUNCTION" ]
 
     RULE_prog = 0
@@ -582,11 +582,11 @@ class rubitoParser ( Parser ):
     WS=54
     INT=55
     FLOAT=56
-    IDDECL=57
+    ID_DECL=57
     ID_GLOBAL=58
     ID_FUNCTION=59
 
-    def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
+    def __init__(self, input:TokenStream, output:typing.TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.7")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
@@ -689,7 +689,7 @@ class rubitoParser ( Parser ):
             self.state = 147
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.IDDECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
+            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.ID_DECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
                 self.state = 143
                 self.expression()
                 self.state = 144
@@ -1359,7 +1359,7 @@ class rubitoParser ( Parser ):
                 self.state = 201
                 self.id_function()
                 pass
-            elif token in [rubitoParser.IDDECL]:
+            elif token in [rubitoParser.ID_DECL]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 202
                 self.id_decl()
@@ -3294,7 +3294,7 @@ class rubitoParser ( Parser ):
             self.state = 430
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.IDDECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
+            if token in [rubitoParser.LITERAL, rubitoParser.REQUIRE, rubitoParser.DEF, rubitoParser.RETURN, rubitoParser.IF, rubitoParser.UNLESS, rubitoParser.WHILE, rubitoParser.FOR, rubitoParser.TRUE, rubitoParser.FALSE, rubitoParser.BIT_NOT, rubitoParser.NOT, rubitoParser.LEFT_RBRACKET, rubitoParser.NIL, rubitoParser.INT, rubitoParser.FLOAT, rubitoParser.ID_DECL, rubitoParser.ID_GLOBAL, rubitoParser.ID_FUNCTION]:
                 self.state = 422
                 self.expression()
                 self.state = 423
@@ -4203,7 +4203,7 @@ class rubitoParser ( Parser ):
             self.state = 543
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [rubitoParser.IDDECL]:
+            if token in [rubitoParser.ID_DECL]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 527
                 self.id_decl()
@@ -6267,8 +6267,8 @@ class rubitoParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def IDDECL(self):
-            return self.getToken(rubitoParser.IDDECL, 0)
+        def ID_DECL(self):
+            return self.getToken(rubitoParser.ID_DECL, 0)
 
         def getRuleIndex(self):
             return rubitoParser.RULE_id_decl
@@ -6297,7 +6297,7 @@ class rubitoParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 787
-            self.match(rubitoParser.IDDECL)
+            self.match(rubitoParser.ID_DECL)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

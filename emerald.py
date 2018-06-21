@@ -1,10 +1,17 @@
-from emerald import *
-from textx.metamodel import metamodel_from_file
+from gen.Rubito.rubitoLexer import *
+from gen.Rubito.rubitoListener import *
+from gen.Rubito.rubitoParser import *
 
-emrld_mm = metamodel_from_file('emerald/grammar.tx')
 
-# Load the program:
-program = emrld_mm.model_from_file('emerald/example.rbt')
+def main():
+    lexer = rubitoLexer(StdinStream())
+    stream = CommonTokenStream(lexer)
+    parser = rubitoParser(stream)
+    tree = parser.prog()
+    printer = rubitoListener()
+    walker = ParseTreeWalker()
+    walker.walk(printer, tree)
 
-for statement in program.statements:
-    print(statement)
+
+if __name__ == '__main__':
+    main()
