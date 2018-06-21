@@ -314,7 +314,7 @@ bool_t : TRUE
 
 nil_t : NIL;
 
-id_decl : IDDECL;
+id_decl : ID_DECL;
 
 id_global : ID_GLOBAL;
 
@@ -401,6 +401,6 @@ WS : (' '|'\t')+ -> skip;
 
 INT : [0-9]+;
 FLOAT : [0-9]*'.'[0-9]+;
-IDDECL : [a-zA-Z_][a-zA-Z0-9_]*;
-ID_GLOBAL : '$'IDDECL;
-ID_FUNCTION : IDDECL[?];
+ID_DECL : [a-zA-Z_][a-zA-Z0-9_]*;
+ID_GLOBAL : '$'ID_DECL;
+ID_FUNCTION : ID_DECL[?];
