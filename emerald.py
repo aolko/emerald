@@ -4,7 +4,7 @@ from gen.Rubito.rubitoParser import *
 
 
 def main():
-    lexer = rubitoLexer(StdinStream())
+    lexer = rubitoLexer(input)
     stream = CommonTokenStream(lexer)
     parser = rubitoParser(stream)
     tree = parser.prog()
