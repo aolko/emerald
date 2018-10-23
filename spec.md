@@ -76,3 +76,59 @@ import "MyModule.Math"
 Add(3,3)
 #=> 6
 ```
+
+## Control structures
+### Conditionals
+
+```
+if condition:
+	#action
+elsif otherCondition:
+	#another action
+else:
+	#another action
+end
+```
+ ### Repeats/Loops
+ Repeat a function 5 times
+```
+5.times do:
+	fn() 
+end
+```
+
+Repeat a function forever
+```
+forever.times do:
+	fn()
+end
+```
+
+```
+for counter in 1..10 do:
+	echo "#{counter}"
+end
+```
+
+```
+counter = 0
+while counter <= 5 do:
+	echo "#{counter}"
+	counter += 1
+end
+```
+
+## Arrays and hashes
+### Arrays
+Arrays are used for simple enumerations
+```
+["i'm","an","array",1,2,3]
+#=> ["i'm","an","array",1,2,3]
+```
+
+### Hashes
+Hashes are dodgy key/value pair dictionaries, look at their mustaches
+```
+{"well"=>"i'm","a"=>"hash"}
+#=> {"well"=>"i'm","a"=>"hash"}
+```
