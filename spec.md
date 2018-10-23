@@ -8,19 +8,19 @@
 
 ### Comments
 ```
-	# this is a single-line comment
-	// as well as this
+# this is a single-line comment
+// as well as this
 ```
 
 ```
-	/*
-		This is a multi-line comment
-	*/
+/*
+	This is a multi-line comment
+*/
 ```
 ```
-	/#
-		this one is also possible
-	#/
+/#
+	this one is also possible
+#/
 ```
 ### Variables
 
@@ -48,7 +48,31 @@ $global_variable
 
 ## Modules
 
-Modules are collections of functions
+Modules are collections of functions and variables
+```
+module "MyModule"
+
+function Hi(Thing):
+	echo "Hi, {Thing}"
+end
+```
+```
+import "MyModule"
+
+MyModule.Hi("World")
+#=> Hi, World
 ```
 
+You can also namespace your modules
+```
+Module "MyModule.Math"
+
+function Add(num1,num2):
+	echo num1 + num2
+end
+```
+```
+import "MyModule.Math"
+Add(3,3)
+#=> 6
 ```
