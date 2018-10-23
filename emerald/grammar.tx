@@ -1,8 +1,0 @@
-Program: statements*=Statement;
-Statement: (PrintStatement | AssignmentStatement) ';';
-PrintStatement: 'print' var=ID;
-AssignmentStatement: var=ID '=' expr=Expression;
-Expression: Sum;
-Sum: Product (('+'|'-') Product)*;
-Product: Value ('*' Value)*;
-Value: ID | INT | ('(' Expression ')');
