@@ -2,7 +2,9 @@
 
 ## TOC
 * Basics
-* Functions
+* Modules
+* Control structures
+* Arrays and hashes
 
 ## Basics
 
