@@ -1,10 +1,10 @@
 package emerald;
-import java.util.ArrayDeque;
+
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;                                                 
 import java.util.List;                                                    
 import java.util.Map;
+import java.util.Stack;
 
 import static emerald.TokenType.*;
 
@@ -17,8 +17,8 @@ public class Scanner
 	private int line = 1;
 	private int indent = 0;
 	private int altIndent = 0;
-	private Deque<Integer> indents = new ArrayDeque<Integer>();
-	private Deque<Integer> altIndents = new ArrayDeque<Integer>();
+	private Stack<Integer> indents = new Stack<Integer>();
+	private Stack<Integer> altIndents = new Stack<Integer>();
 	private int bracketLevel = 0;
 	private boolean atbol = true;
 	
@@ -28,6 +28,7 @@ public class Scanner
 		keywords = new HashMap<>();
 		keywords.put("and",      AND);
 		keywords.put("else",     ELSE);
+		keywords.put("elsif", 	 ELSEIF);
 		keywords.put("false",    FALSE);
 		keywords.put("for",      FOR);
 		keywords.put("fn", 		 FN);
@@ -43,6 +44,8 @@ public class Scanner
 	
 	Scanner(String source) {
 		this.source = source;
+		indents.push(indent);
+		altIndents.push(altIndent);
 	}
 	
 	List<Token> scanTokens() {
@@ -74,15 +77,20 @@ public class Scanner
 			altIndent = 0;
 			
 			while (true) {
-				if (match(' ')) {
-					indent++;
-					altIndent++;
-				} else if (match('\t')) {
+				if (isAtEnd()) break;
+				
+				if (match('\t')) {
+					System.out.println("Matched tab");
 					indent++;
 					for (int i = 0; i < 8; i++) {
 						if (indent % 8 == 0) break;
+						
 						indent++;
 					}
+					
+					altIndent++;
+				} else if (match(' ')) {
+					indent++;
 					altIndent++;
 				} else {
 					break;
@@ -91,8 +99,12 @@ public class Scanner
 			
 			if (indent == indents.peek() && altIndent == altIndents.peek()) {
 				// Do nothing, indentation is the same.
+				System.out.println("Same Indent");
 			} else if (indent > indents.peek() && altIndent > altIndents.peek()) {
 				addToken(INDENT); // Indentation.
+				indents.push(indent);
+				altIndents.push(altIndent);
+				System.out.println("Indent");
 			} else if (indent < indents.peek() && altIndent < altIndents.peek()) {
 				boolean found = false; // Dedentation.
 				
@@ -110,12 +122,10 @@ public class Scanner
 				if (!found) {
 					Emerald.error(line, "Did not find previous block with same indentation.");
 				}
+				System.out.println("Dedent");
 			} else {
 				Emerald.error(line, "Indentation is invalid.");
 			}
-			
-			indents.push(indent);
-			altIndents.push(altIndent);
 			
 			atbol = false;
 		}
@@ -161,6 +171,7 @@ public class Scanner
 				} else {
 					while (peek() != '\n' && !isAtEnd()) advance();
 				}
+				break;
 			
 			case '"': string(); break;
 			

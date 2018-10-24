@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Emerald
 {
-	private static final Interpreter interpreter = new Interpreter();
 	private static boolean hadError = false;
 	private static boolean hadRuntimeError = false;
 	
@@ -47,6 +46,10 @@ public class Emerald
 	private static void run(String source) {
 		Scanner scanner = new Scanner(source);
 		List<Token> tokens = scanner.scanTokens();
+		
+		for (Token token : tokens) {
+			System.out.println(token);
+		}
 		
 //		Parser parser = new Parser(tokens);
 //		List<Stmt> statements = parser.parse();

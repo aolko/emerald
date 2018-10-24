@@ -22,7 +22,7 @@ public enum TokenType
 	IDENTIFIER, STRING, NUMBER,
 	
 	// Keywords
-	ELSE, FALSE, FN, FOR, IF, NIL,
+	ELSE, ELSEIF, FALSE, FN, FOR, IF, NIL,
 	PRINT, RETURN, TRUE, VAR, WHILE,
 	MODULE,
 	

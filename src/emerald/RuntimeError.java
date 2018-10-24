@@ -1,5 +1,6 @@
 package emerald;
 
+@SuppressWarnings("serial")
 public class RuntimeError extends RuntimeException {
 	final Token token;
 	
