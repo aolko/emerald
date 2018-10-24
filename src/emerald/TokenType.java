@@ -1,0 +1,32 @@
+package emerald;
+public enum TokenType
+{
+	// Single character tokens
+	LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
+	COMMA, DOT, SEMICOLON, SLASH, BIT_AND, BIT_OR,
+	QUESTION, COLON, LEFT_SQUARE, RIGHT_SQUARE,
+	
+	// One or two character tokens
+	BANG, BANG_EQUAL,
+	EQUAL, EQUAL_EQUAL,
+	GREATER, GREATER_EQUAL,
+	LESS, LESS_EQUAL,
+	PLUS, MINUS,
+	STAR, EXPONENT,
+	AND, OR,
+	
+	// Three character tokens
+	SIGN,
+	
+	// Literals
+	IDENTIFIER, STRING, NUMBER,
+	
+	// Keywords
+	ELSE, FALSE, FN, FOR, IF, NIL,
+	PRINT, RETURN, TRUE, VAR, WHILE,
+	MODULE,
+	
+	INDENT, DEDENT, NEWLINE,
+	
+	EOF
+}
