@@ -132,7 +132,7 @@ Modules are collections of functions and variables
 ```
 module "MyModule"
 
-function Hi(Thing):
+fn Hi(Thing):
 	echo "Hi, {Thing}"
 end
 ```
