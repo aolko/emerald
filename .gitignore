@@ -158,5 +158,8 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-# Build folder
+# Eclipse
 bin
+.settings
+.classpath
+.project
