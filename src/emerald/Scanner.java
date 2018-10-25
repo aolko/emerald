@@ -19,7 +19,7 @@ public class Scanner
 	private int altIndent = 0;
 	private Stack<Integer> indents = new Stack<Integer>();
 	private Stack<Integer> altIndents = new Stack<Integer>();
-	private int bracketLevel = 0;
+	private Stack<Integer> brackets = new Stack<Integer>();
 	private boolean atbol = true;
 	
 	private static final Map<String, TokenType> keywords;
@@ -32,7 +32,9 @@ public class Scanner
 		keywords.put("false",    FALSE);
 		keywords.put("for",      FOR);
 		keywords.put("fn", 		 FN);
+		keywords.put("in", 		 IN);
 		keywords.put("if",       IF);
+		keywords.put("import", 	 IMPORT);
 		keywords.put("nil",      NIL);
 		keywords.put("or",       OR);
 		keywords.put("print",    PRINT);
@@ -54,8 +56,10 @@ public class Scanner
 			scanToken();
 		}
 		
-		if (bracketLevel != 0) { // TODO: Fix this error message.
-			Emerald.error(line, "Unclosed brackets somewhere. /shrug");
+		if (!brackets.isEmpty()) {
+			for (int i = 0; i < brackets.capacity() - 1; i++) {
+				Emerald.error(brackets.get(i), "Unclosed bracket.");
+			}
 		}
 		
 		tokens.add(new Token(EOF, null, "", line));
@@ -79,7 +83,7 @@ public class Scanner
 			while (true) {
 				if (isAtEnd()) break;
 				
-				if (match('\t')) {
+				if (c == '\t') {
 					System.out.println("Matched tab");
 					indent++;
 					for (int i = 0; i < 8; i++) {
@@ -89,22 +93,22 @@ public class Scanner
 					}
 					
 					altIndent++;
-				} else if (match(' ')) {
+				} else if (c == ' ') {
 					indent++;
 					altIndent++;
 				} else {
 					break;
 				}
+				
+				c = advance();
 			}
 			
 			if (indent == indents.peek() && altIndent == altIndents.peek()) {
 				// Do nothing, indentation is the same.
-				System.out.println("Same Indent");
 			} else if (indent > indents.peek() && altIndent > altIndents.peek()) {
-				addToken(INDENT); // Indentation.
+				addToken(INDENT, previous()); // Indentation.
 				indents.push(indent);
 				altIndents.push(altIndent);
-				System.out.println("Indent");
 			} else if (indent < indents.peek() && altIndent < altIndents.peek()) {
 				boolean found = false; // Dedentation.
 				
@@ -116,13 +120,12 @@ public class Scanner
 					
 					indents.pop();
 					altIndents.pop();
-					addToken(DEDENT);
+					addToken(DEDENT, previous());
 				}
 				
 				if (!found) {
 					Emerald.error(line, "Did not find previous block with same indentation.");
 				}
-				System.out.println("Dedent");
 			} else {
 				Emerald.error(line, "Indentation is invalid.");
 			}
@@ -131,14 +134,20 @@ public class Scanner
 		}
 		
 		switch (c) {
-			case '(': addToken(LEFT_PAREN); bracketLevel++; break;
-			case ')': addToken(RIGHT_PAREN); bracketLevel--; break;
-			case '{': addToken(LEFT_BRACE); bracketLevel++; break;
-			case '}': addToken(RIGHT_BRACE); bracketLevel--; break;
-			case '[': addToken(LEFT_SQUARE); bracketLevel++; break;
-			case ']': addToken(RIGHT_SQUARE); bracketLevel--; break;
+			case '(': addToken(LEFT_PAREN); brackets.push(line); break;
+			case ')': addToken(RIGHT_PAREN); brackets.pop(); break;
+			case '{': addToken(LEFT_BRACE); brackets.push(line); break;
+			case '}': addToken(RIGHT_BRACE); brackets.pop(); break;
+			case '[': addToken(LEFT_SQUARE); brackets.push(line); break;
+			case ']': addToken(RIGHT_SQUARE); brackets.pop(); break;
 			case ',': addToken(COMMA); break;
-			case '.': addToken(DOT); break;
+			case '.':
+				if (match('.') && match('.')) {
+					addToken(ELIPSIS);
+				} else {
+					addToken(DOT);
+				}
+				break;
 			case '-': addToken(MINUS); break;
 			case '+': addToken(PLUS); break;
 			case ';': addToken(SEMICOLON); break;
@@ -181,11 +190,11 @@ public class Scanner
 				break;
 			
 			case '\n':
-				if (bracketLevel == 0 && previous() != '\\') {
+				if (brackets.isEmpty() && previous() != '\\') {
 					addToken(NEWLINE);
-					line++;
 					atbol = true;
 				}
+				line++;
 				break;
 			
 			default:
