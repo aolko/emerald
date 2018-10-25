@@ -12,9 +12,24 @@ import java.util.List;
 
 abstract class Stmt {
 	interface Visitor<R> {
-		R visitBlockStmt(Block stmt);
 		R visitExpressionStmt(Expression stmt);
+		R visitBlockStmt(Block stmt);
+		R visitVarStmt(Var stmt);
+		R visitIfStmt(If stmt);
 	}
+
+	static class Expression extends Stmt {
+		final Expr expression;
+
+		Expression(Expr expression) {
+			this.expression = expression;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitExpressionStmt(this);
+		}
+	}
+
 
 	static class Block extends Stmt {
 		final List<Stmt> statements;
@@ -29,15 +44,36 @@ abstract class Stmt {
 	}
 
 
-	static class Expression extends Stmt {
-		final Expr expression;
+	static class Var extends Stmt {
+		final Token identifier;
+		final Expr value;
+		final boolean global;
 
-		Expression(Expr expression) {
-			this.expression = expression;
+		Var(Token identifier, Expr value, boolean global) {
+			this.identifier = identifier;
+			this.value = value;
+			this.global = global;
 		}
 
 		<R> R accept(Visitor<R> visitor) {
-			return visitor.visitExpressionStmt(this);
+			return visitor.visitVarStmt(this);
+		}
+	}
+
+
+	static class If extends Stmt {
+		final Expr condition;
+		final Stmt trueBody;
+		final Stmt falseBody;
+
+		If(Expr condition, Stmt trueBody, Stmt falseBody) {
+			this.condition = condition;
+			this.trueBody = trueBody;
+			this.falseBody = falseBody;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitIfStmt(this);
 		}
 	}
 

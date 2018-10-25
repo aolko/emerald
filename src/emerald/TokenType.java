@@ -5,10 +5,8 @@ public enum TokenType
 	LEFT_PAREN, RIGHT_PAREN,
 	LEFT_BRACE, RIGHT_BRACE,
 	COMMA, DOT, SEMICOLON, SLASH,
-	BIT_AND, BIT_OR, BIT_XOR,
-	QUESTION, COLON,
+	QUESTION, COLON, SIGIL,
 	LEFT_SQUARE, RIGHT_SQUARE,
-	LOG_AND, LOG_OR,
 	
 	// One or two character tokens
 	BANG, BANG_EQUAL,
@@ -17,7 +15,8 @@ public enum TokenType
 	LESS, LESS_EQUAL,
 	PLUS, MINUS,
 	STAR, EXPONENT,
-	AND, OR,
+	AND, OR, BIT_XOR,
+	BIT_AND, BIT_OR,
 	
 	// Three character tokens
 	SIGN, ELIPSIS,

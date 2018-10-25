@@ -126,7 +126,9 @@ function main(argv)
             "Stmt",
             {
                 Block = "List<Stmt> statements",
-                Expression = "Expr expression"
+                Expression = "Expr expression",
+		If = "Expr condition, Stmt trueBody, Stmt falseBody",
+		Var = "Token identifier, Expr value, boolean global"
             }
         )
     end

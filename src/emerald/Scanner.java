@@ -150,6 +150,9 @@ public class Scanner
 				break;
 			case '-': addToken(MINUS); break;
 			case '+': addToken(PLUS); break;
+			case '^': addToken(BIT_XOR); break;
+			case '&': addToken(match('&') ? AND : BIT_AND); break;
+			case '|': addToken(match('|') ? OR : BIT_OR); break;
 			case ';': addToken(SEMICOLON); break;
 			case ':': addToken(COLON); break;
 			case '*': addToken(match('*') ? EXPONENT : STAR); break;
@@ -159,6 +162,8 @@ public class Scanner
 			case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
 			case '<': addToken(match('=') ? (match('>') ? SIGN : LESS_EQUAL) : LESS); break;
 			case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
+			
+			case '$': addToken(SIGIL); break;
 			
 			case '/':
 				if (match('/')) {
@@ -191,7 +196,7 @@ public class Scanner
 			
 			case '\n':
 				if (brackets.isEmpty() && previous() != '\\') {
-					addToken(NEWLINE);
+					//addToken(NEWLINE);
 					atbol = true;
 				}
 				line++;

@@ -31,7 +31,8 @@ public class Parser {
 	
 	private Stmt declaration() {
 		try {
-			//if (match(VAR)) return varDeclaration();
+			if (match(IDENTIFIER)) return varDeclaration();
+			if (match(SIGIL)) return globalVarDeclaration();
 			
 			return statement();
 		} catch (ParseError error) {
@@ -40,26 +41,68 @@ public class Parser {
 		}
 	}
 	
+	private Stmt varDeclaration() {
+		Token identifier = previous();
+		consume(EQUAL, "Expect '=' after identifier.");
+		Expr value = expression();
+		
+		return new Stmt.Var(identifier, value, false);
+	}
+	
+	private Stmt globalVarDeclaration() {
+		Token identifier = consume(IDENTIFIER, "Expect identifier after '$'.");
+		consume(EQUAL, "Expect '=' after identifier.");
+		Expr value = expression();
+		
+		return new Stmt.Var(identifier, value, true);
+	}
+	
 	private Stmt statement() {
+		if (match(IF)) return ifStatement(); 
 		if (match(INDENT)) return new Stmt.Block(block());
 		
 		return expressionStatement();
 	}
 	
+	private Stmt ifStatement() {
+		Expr condition = expression();
+		
+		consume(COLON, "Expect `:` after condition.");
+		
+		Stmt ifBody;
+		if (match(INDENT)) {
+			ifBody = new Stmt.Block(block());
+		} else {
+			ifBody = declaration();
+		}
+		
+		Stmt elseBody = null;
+		if (match(ELSE)) {
+			consume(COLON, "Expect `:` after 'else'.");
+			if (match(INDENT)) {
+				elseBody = new Stmt.Block(block());
+			} else {
+				elseBody = declaration();
+			}
+		} else if (match(ELSEIF)) {
+			elseBody = ifStatement();
+		}
+		
+		return new Stmt.If(condition, ifBody, elseBody);
+	}
+	
 	private List<Stmt> block() {
 		List<Stmt> statements = new ArrayList<>();
 		
-		while (!check(DEDENT) && !isAtEnd()) {
+		while (!match(DEDENT) && !isAtEnd()) {
 			statements.add(declaration());
 		}
 		
-		consume(DEDENT, "Expect dedentation after block.");
 		return statements;
 	}
 	
 	private Stmt expressionStatement() {
 		Expr expr = expression();
-		consume(SEMICOLON, "Expect ';' after expression.");
 		return new Stmt.Expression(expr);
 	}
 	
@@ -68,7 +111,7 @@ public class Parser {
 	}
 	
 	private Expr assignment() {
-		Expr expr = logical();
+		Expr expr = bitwise();
 		
 		if (match(EQUAL)) {
 			Token equals = previous();
@@ -80,6 +123,18 @@ public class Parser {
 			}
 			
 			error(equals, "Invalid assignment target.");
+		}
+		
+		return expr;
+	}
+	
+	private Expr bitwise() {
+		Expr expr = logical();
+		
+		while (match(BIT_AND, BIT_OR, BIT_XOR)) {
+			Token operator = previous();
+			Expr right = logical();
+			expr = new Expr.Binary(expr, operator, right);
 		}
 		
 		return expr;
@@ -111,7 +166,7 @@ public class Parser {
 	
 	private Expr comparison() {
 		Expr expr = addition();
-		while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
+		while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, SIGN)) {
 			Token operator = previous();
 			Expr right = addition();
 			expr = new Expr.Binary(expr, operator, right);

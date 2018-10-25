@@ -8,17 +8,30 @@ package emerald;
  */
 
 
-//import java.util.List;
+import java.util.List;
 
 abstract class Expr {
 	interface Visitor<R> {
+		R visitGroupingExpr(Grouping expr);
 		R visitLiteralExpr(Literal expr);
 		R visitVariableExpr(Variable expr);
-		R visitAssignExpr(Assign expr);
 		R visitUnaryExpr(Unary expr);
+		R visitAssignExpr(Assign expr);
 		R visitBinaryExpr(Binary expr);
-		R visitGroupingExpr(Grouping expr);
 	}
+
+	static class Grouping extends Expr {
+		final Expr expression;
+
+		Grouping(Expr expression) {
+			this.expression = expression;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitGroupingExpr(this);
+		}
+	}
+
 
 	static class Literal extends Expr {
 		final Object value;
@@ -46,21 +59,6 @@ abstract class Expr {
 	}
 
 
-	static class Assign extends Expr {
-		final Token name;
-		final Expr value;
-
-		Assign(Token name, Expr value) {
-			this.name = name;
-			this.value = value;
-		}
-
-		<R> R accept(Visitor<R> visitor) {
-			return visitor.visitAssignExpr(this);
-		}
-	}
-
-
 	static class Unary extends Expr {
 		final Token operator;
 		final Expr right;
@@ -72,6 +70,21 @@ abstract class Expr {
 
 		<R> R accept(Visitor<R> visitor) {
 			return visitor.visitUnaryExpr(this);
+		}
+	}
+
+
+	static class Assign extends Expr {
+		final Token name;
+		final Expr value;
+
+		Assign(Token name, Expr value) {
+			this.name = name;
+			this.value = value;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitAssignExpr(this);
 		}
 	}
 
@@ -89,19 +102,6 @@ abstract class Expr {
 
 		<R> R accept(Visitor<R> visitor) {
 			return visitor.visitBinaryExpr(this);
-		}
-	}
-
-
-	static class Grouping extends Expr {
-		final Expr expression;
-
-		Grouping(Expr expression) {
-			this.expression = expression;
-		}
-
-		<R> R accept(Visitor<R> visitor) {
-			return visitor.visitGroupingExpr(this);
 		}
 	}
 
