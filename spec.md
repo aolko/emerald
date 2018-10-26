@@ -2,6 +2,7 @@
 
 ## TOC
 * Basics
+* Math
 * Modules
 * Control structures
 * Arrays and hashes
