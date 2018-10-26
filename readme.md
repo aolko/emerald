@@ -8,3 +8,7 @@
 Take a peek at our progress graph
 
 ![](https://i.imgur.com/KI6OzLq.png)
+
+## Contact
+
+You can chat with us on our [discord server](https://discord.gg/HtEPRX)
