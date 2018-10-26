@@ -7,4 +7,4 @@
 
 Take a peek at our progress graph
 
-![](https://i.imgur.com/KI6OzLq.png)
+![](https://i.imgur.com/Sq3plQo.png)
