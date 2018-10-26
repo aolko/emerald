@@ -147,7 +147,7 @@ You can also namespace your modules
 ```
 Module "MyModule.Math"
 
-function Add(num1,num2):
+fn Add(num1,num2):
 	echo num1 + num2
 end
 ```
