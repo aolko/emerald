@@ -65,19 +65,20 @@ print "I'm printing!"
 
 ### Arithmetic
 ```
-1 + 1
-2 - 1
-3 * 5
-40 / 8
-2 ** 5
-5 % 3
+1 + 1 #addition
+2 - 1 #subtraction
+3 * 5 #multiplication
+40 / 8 #division
+2 ** 5 #exponentiation (x^y)
+5 % 3 #modulo
 ```
 
 ### Bitwise
 ```
-3 & 5
-3 | 5
-3 ^ 5
+3 & 5 #and
+3 | 5 #or
+3 ^ 5 #xor
+3 ~ 5 #not
 ```
 ```
 nil
