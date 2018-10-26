@@ -43,16 +43,24 @@ public class Parser {
 	
 	private Stmt varDeclaration() {
 		Token identifier = previous();
-		consume(EQUAL, "Expect '=' after identifier.");
-		Expr value = expression();
+		
+		Expr value = null;
+		if (!match(SEMICOLON)) {
+			consume(EQUAL, "Expect '=' after identifier.");
+			value = expression();
+		}
 		
 		return new Stmt.Var(identifier, value, false);
 	}
 	
 	private Stmt globalVarDeclaration() {
 		Token identifier = consume(IDENTIFIER, "Expect identifier after '$'.");
-		consume(EQUAL, "Expect '=' after identifier.");
-		Expr value = expression();
+		
+		Expr value = null;
+		if (!match(SEMICOLON)) {
+			consume(EQUAL, "Expect '=' after identifier.");
+			value = expression();
+		}
 		
 		return new Stmt.Var(identifier, value, true);
 	}
@@ -277,7 +285,7 @@ public class Parser {
 		advance();
 		
 		while (!isAtEnd()) {
-			if (previous().type == SEMICOLON) return;
+			if (previous().type == SEMICOLON || previous().type == NEWLINE) return;
 			
 			switch(peek().type) {
 				case FN:

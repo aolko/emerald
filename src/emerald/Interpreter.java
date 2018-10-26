@@ -18,8 +18,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 	}
 	
 	@Override
+	public Void visitVarStmt(Stmt.Var stmt) {
+		return null;
+	}
+	
+	@Override
 	public Void visitExpressionStmt(Stmt.Expression stmt) {
 		evaluate(stmt.expression);
+		return null;
+	}
+	
+	@Override
+	public Void visitIfStmt(Stmt.If stmt) {
 		return null;
 	}
 	
