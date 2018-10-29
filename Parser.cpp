@@ -43,19 +43,61 @@ std::unique_ptr<Stmt> Parser::declaration() {
 }
 
 std::unique_ptr<Stmt> Parser::varDeclaration() {
+    Token identifier = previous();
     
+    std::unique_ptr<Expr> value = nullptr;
+    if (!match({TokenType::SEMICOLON})) {
+        consume(TokenType::EQUAL, "Expect '=' after identifier.");
+        value = std::move(expression());
+    }
+    
+    return std::unique_ptr<Stmt>(new Stmt::Var(identifier, std::move(value), false));
 }
 
 std::unique_ptr<Stmt> Parser::globalVarDeclaration() {
+    Token identifier = consume(TokenType::IDENTIFIER, "Expect identifier after '$'.");
     
+    std::unique_ptr<Expr> value = nullptr;
+    if (!match({TokenType::SEMICOLON})) {
+        consume(TokenType::EQUAL, "Expect '=' after identifier.");
+        value = std::move(expression());
+    }
+    
+    return std::unique_ptr<Stmt>(new Stmt::Var(identifier, std::move(value), true));
 }
 
 std::unique_ptr<Stmt> Parser::statement() {
+    if (match({TokenType::IF})) return std::move(ifStatement());
+    if (match({TokenType::INDENT})) return std::unique_ptr<Stmt>(new Stmt::Block(std::move(block())));
     
+    return std::move(expressionStatement());
 }
 
 std::unique_ptr<Stmt> Parser::ifStatement() {
+    std::unique_ptr<Expr> condition = std::move(expression());
     
+    consume(TokenType::COLON, "Expect ':' after condition.");
+    
+    std::unique_ptr<Stmt> ifBody = nullptr;
+    if (match({TokenType::INDENT})) {
+        ifBody = std::unique_ptr<Stmt>(new Stmt::Block(std::move(block())));
+    } else {
+        ifBody = std::move(declaration());
+    }
+    
+    std::unique_ptr<Stmt> elseBody = nullptr;
+    if (match({TokenType::ELSE})) {
+        consume(TokenType::COLON, "Expect ':' after 'else'.");
+        if (match({TokenType::INDENT})) {
+            elseBody = std::unique_ptr<Stmt>(new Stmt::Block(std::move(block())));
+        } else {
+            elseBody = std::move(declaration());
+        }
+    } else if (match({TokenType::ELSEIF})) {
+        elseBody = std::move(ifStatement());
+    }
+    
+    return std::unique_ptr<Stmt>(new Stmt::If(std::move(condition), std::move(ifBody), std::move(elseBody)));
 }
 
 std::vector<std::unique_ptr<Stmt>> Parser::block() {
