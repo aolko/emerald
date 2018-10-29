@@ -14,10 +14,10 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <tuple>
 #include <string>
 #include <vector>
 #include <memory>
+#include <initializer_list>
 #include "Token.h"
 #include "Stmt.h"
 #include "Expr.h"
@@ -48,8 +48,7 @@ private:
     std::unique_ptr<Expr> unary();
     std::unique_ptr<Expr> primary();
     
-    template <typename... Args>
-    bool match(TokenType type1, Args... args);
+    bool match(std::initializer_list<TokenType> types);
     bool check(TokenType type);
     Token advance();
     Token consume(TokenType type, std::string message);
@@ -61,8 +60,8 @@ private:
     
     void synchronize();
     
-    std::vector<std::unique_ptr<Stmt>> statements;
     std::vector<Token> tokens;
+    int current = 0;
 };
 
 #endif /* PARSER_H */

@@ -17,6 +17,7 @@
 #include <string>
 
 class ParseError : public std::exception {
+public:
     ParseError() {};
 };
 
