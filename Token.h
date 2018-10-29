@@ -22,8 +22,6 @@
 class Token {
 public:
     Token(TokenType type, std::string lexeme, std::any literal, int line, int column);
-    Token(const Token& orig);
-    virtual ~Token();
     
     TokenType type;
     std::string lexeme;

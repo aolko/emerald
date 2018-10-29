@@ -19,6 +19,7 @@
 #include <vector>
 #include <stack>
 #include <iostream>
+#include <ctype.h>
 #include "Token.h"
 #include "Keywords.h"
 

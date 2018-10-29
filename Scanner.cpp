@@ -39,6 +39,7 @@ std::vector<Token> Scanner::scanTokens() {
     }
     
     addToken(TokenType::END_OF_FILE);
+    
     return tokens;
 }
 
@@ -56,13 +57,12 @@ void Scanner::scanToken() {
             
             if (c == '\t') {
                 indent++;
+                altIndent++;
                 
                 for (int i = 0; i < 8; i++) {
                     if (indent % 8 == 0) break;
                     indent++;
                 }
-                
-                altIndent++;
             } else if (c == ' ') {
                 indent++;
                 altIndent++;
@@ -103,6 +103,7 @@ void Scanner::scanToken() {
         }
         
         atbol = false;
+        start = current - 1;
     }
     
     switch(c) {
@@ -230,7 +231,7 @@ void Scanner::identifier() {
     // See if the identifier is a reserved keyword.
     std::string text = source.substr(start, current);
     TokenType type = TokenType::IDENTIFIER;
-    if (keywords.count(text) == 1) {
+    if (keywords.count(text) > 0) {
         type = keywords[text];
     }
     
@@ -238,13 +239,11 @@ void Scanner::identifier() {
 }
 
 bool Scanner::isDigit(char c) {
-    return c >= '0' && c <= '9';
+    return isdigit(c);
 }
 
 bool Scanner::isAlpha(char c) {
-    return ((c >= 'a' && c <= 'z') ||
-            (c >= 'A' && c <= 'Z') ||
-            (c == '_'));
+    return isalpha(c) || c == '_';
 }
 
 bool Scanner::isAlphaNumeric(char c) {
@@ -268,7 +267,7 @@ char Scanner::peek() {
 }
 
 char Scanner::peekNext() {
-    if (current + 1 >= source.length() || isAtEnd()) return '\0';
+    if (current + 1 >= source.length()) return '\0';
     return source.at(current + 1);
 }
 
@@ -289,6 +288,6 @@ void Scanner::addToken(TokenType type) {
 }
 
 void Scanner::addToken(TokenType type, std::any literal) {
-    std::string text = source.substr(start, current);
+    std::string text = source.substr(start, current - start);
     tokens.push_back(Token(type, text, literal, line, column));
 }

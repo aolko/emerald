@@ -19,12 +19,6 @@ Token::Token(TokenType type, std::string lexeme, std::any literal, int line, int
     
 }
 
-Token::Token(const Token& orig) {
-}
-
-Token::~Token() {
-}
-
 std::ostream& operator<<(std::ostream& os, const Token& tok) {
     os << TokenTypeNames[int(tok.type)] << " " << tok.lexeme << " " << tok.line << ":" << tok.column;
     return os;
