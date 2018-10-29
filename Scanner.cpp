@@ -115,8 +115,10 @@ void Scanner::scanToken() {
         case ']': addToken(TokenType::RIGHT_SQUARE); brackets.pop(); break;
         case ',': addToken(TokenType::COMMA); break;
         case '.':
-            if (match('.') && match('.')) {
+            if (peek() == '.' && peekNext() == '.') {
                 addToken(TokenType::ELIPSIS);
+                advance();
+                advance();
             } else {
                 addToken(TokenType::DOT);
             }

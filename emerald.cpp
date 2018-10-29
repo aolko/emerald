@@ -22,7 +22,7 @@
  * 
  */
 int main(int argc, char** argv) {
-    Scanner scanner = Scanner("if (i == 2):\n\tprint(\"Hello\")\n");
+    Scanner scanner = Scanner(".. ... . if (i == 2):\n\tprint(\"Hello\")\n");
     std::vector<Token> tokens = scanner.scanTokens();
     
     for (int i = 0; i < tokens.size(); i++) {
