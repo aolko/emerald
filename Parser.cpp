@@ -22,7 +22,7 @@ std::vector<std::unique_ptr<Stmt>> Parser::parse() {
     std::vector<std::unique_ptr<Stmt>> statements;
     
     while (!isAtEnd()) {
-        std::unique_ptr<Stmt> stmt = declaration();
+        std::unique_ptr<Stmt> stmt = std::move(declaration());
         if (stmt)
             statements.push_back(std::move(stmt));
     }
@@ -32,38 +32,11 @@ std::vector<std::unique_ptr<Stmt>> Parser::parse() {
 
 std::unique_ptr<Stmt> Parser::declaration() {
     try {
-        if (match({TokenType::IDENTIFIER})) return varDeclaration();
-        if (match({TokenType::SIGIL})) return globalVarDeclaration();
-        
-        return statement();
+        return std::move(statement());
     } catch (ParseError error) {
         synchronize();
         return nullptr;
     }
-}
-
-std::unique_ptr<Stmt> Parser::varDeclaration() {
-    Token identifier = previous();
-    
-    std::unique_ptr<Expr> value = nullptr;
-    if (!match({TokenType::SEMICOLON})) {
-        consume(TokenType::EQUAL, "Expect '=' after identifier.");
-        value = std::move(expression());
-    }
-    
-    return std::unique_ptr<Stmt>(new Stmt::Var(identifier, std::move(value), false));
-}
-
-std::unique_ptr<Stmt> Parser::globalVarDeclaration() {
-    Token identifier = consume(TokenType::IDENTIFIER, "Expect identifier after '$'.");
-    
-    std::unique_ptr<Expr> value = nullptr;
-    if (!match({TokenType::SEMICOLON})) {
-        consume(TokenType::EQUAL, "Expect '=' after identifier.");
-        value = std::move(expression());
-    }
-    
-    return std::unique_ptr<Stmt>(new Stmt::Var(identifier, std::move(value), true));
 }
 
 std::unique_ptr<Stmt> Parser::statement() {
@@ -231,8 +204,11 @@ std::unique_ptr<Expr> Parser::primary() {
         return std::unique_ptr<Expr>(new Expr::Literal(previous().literal));
     }
     
-    if (match({TokenType::IDENTIFIER})) {
-        return std::unique_ptr<Expr>(new Expr::Variable(previous()));
+    if (match({TokenType::SIGIL})) {
+        Token identifier = consume(TokenType::IDENTIFIER, "Expect identifier after '$'.");
+        return std::unique_ptr<Expr>(new Expr::Variable(identifier, true));
+    } else if (match({TokenType::IDENTIFIER})) {
+        return std::unique_ptr<Expr>(new Expr::Variable(previous(), false));
     }
     
     if (match({TokenType::LEFT_PAREN})) {

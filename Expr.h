@@ -15,8 +15,8 @@
 #include "Token.h"
 
 struct Expr {
-        virtual ~Expr() = default;
-    
+	virtual ~Expr() = default;
+
 	template <class R>
 	struct Visitor;
 	struct Literal;
@@ -56,9 +56,11 @@ struct Expr::Literal : public Expr {
 
 struct Expr::Variable : public Expr {
 	Token name;
+	bool global;
 
-	Variable(Token name) {
+	Variable(Token name, bool global) {
 		this->name = name;
+		this->global = global;
 	}
 
 	template <class R>

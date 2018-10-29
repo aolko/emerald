@@ -24,11 +24,11 @@ Log::~Log() {
 
 void Log::runtimeError(RuntimeError error) {}
 void Log::error(int line, std::string message) {
-    report(line, 0, "", message, NULL);
+    report(line, 0, "", message, "");
 }
 
 void Log::error(int line, int column, std::string message) {
-    report(line, column, "", message, NULL);
+    report(line, column, "", message, "");
 }
 
 void Log::error(int line, int column, std::string message, std::string lineStr) {
@@ -37,9 +37,9 @@ void Log::error(int line, int column, std::string message, std::string lineStr) 
 
 void Log::error(Token token, std::string message) {
     if (token.type == TokenType::END_OF_FILE) {
-        report(token.line, token.column, " at end", message, NULL);
+        report(token.line, token.column, " at end", message, "");
     } else {
-        report(token.line, token.column, " at '" + token.lexeme + "'", message, NULL);
+        report(token.line, token.column, " at '" + token.lexeme + "'", message, "");
     }
 }
 

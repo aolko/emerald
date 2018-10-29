@@ -14,8 +14,10 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "Token.h"
 #include "Scanner.h"
+#include "Parser.h"
 /*
  * 
  */
@@ -26,6 +28,9 @@ int main(int argc, char** argv) {
     for (int i = 0; i < tokens.size(); i++) {
         std::cout << tokens[i] << std::endl;
     }
+    
+    Parser parser(tokens);
+    std::vector<std::unique_ptr<Stmt>> stmts = std::move(parser.parse());
     
     return 0;
 }

@@ -104,6 +104,8 @@ local function defineAst(outputPath, baseName, types)
 
     io.write("struct " .. baseName .. " {\n")
 
+    io.write("\tvirtual ~" .. baseName .. "() = default;\n\n")
+
     io.write"\ttemplate <class R>\n"
     io.write"\tstruct Visitor;\n"
 
@@ -144,7 +146,7 @@ function main(argv)
                 Grouping = "std::unique_ptr<Expr> expression",
                 Literal = "std::any value",
                 Unary = "Token op, std::unique_ptr<Expr> right",
-                Variable = "Token name"
+                Variable = "Token name, bool global"
             }
         )
 
@@ -154,8 +156,7 @@ function main(argv)
             {
                 Block = "std::vector<std::unique_ptr<Stmt>> statements",
                 Expression = "std::unique_ptr<Expr> expression",
-            		If = "std::unique_ptr<Expr> condition, std::unique_ptr<Stmt> trueBody, std::unique_ptr<Stmt> falseBody",
-            		Var = "Token identifier, std::unique_ptr<Expr> value, bool global"
+            		If = "std::unique_ptr<Expr> condition, std::unique_ptr<Stmt> trueBody, std::unique_ptr<Stmt> falseBody"
             }
         )
     end

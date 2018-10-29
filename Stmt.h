@@ -16,12 +16,11 @@
 #include "Expr.h"
 
 struct Stmt {
-        virtual ~Stmt() = default;
-    
+	virtual ~Stmt() = default;
+
 	template <class R>
 	struct Visitor;
 	struct Block;
-	struct Var;
 	struct If;
 	struct Expression;
 
@@ -32,7 +31,6 @@ struct Stmt {
 template <class R>
 struct Stmt::Visitor {
 	virtual R visitBlockStmt(Stmt::Block stmt) = 0;
-	virtual R visitVarStmt(Stmt::Var stmt) = 0;
 	virtual R visitIfStmt(Stmt::If stmt) = 0;
 	virtual R visitExpressionStmt(Stmt::Expression stmt) = 0;
 };
@@ -47,24 +45,6 @@ struct Stmt::Block : public Stmt {
 	template <class R>
 	R accept(R& visitor) {
 		return visitor.visitBlockStmt(*this);
-	}
-};
-
-
-struct Stmt::Var : public Stmt {
-	Token identifier;
-	std::unique_ptr<Expr> value;
-	bool global;
-
-	Var(Token identifier, std::unique_ptr<Expr> value, bool global) {
-		this->identifier = identifier;
-		this->value = std::move(value);
-		this->global = global;
-	}
-
-	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitVarStmt(*this);
 	}
 };
 
