@@ -4,7 +4,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Expr.h</itemPath>
+      <itemPath>Keywords.h</itemPath>
+      <itemPath>Log.h</itemPath>
       <itemPath>Scanner.h</itemPath>
+      <itemPath>Stmt.h</itemPath>
       <itemPath>Token.h</itemPath>
       <itemPath>TokenType.h</itemPath>
     </logicalFolder>
@@ -15,6 +19,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Log.cpp</itemPath>
       <itemPath>Scanner.cpp</itemPath>
       <itemPath>Token.cpp</itemPath>
       <itemPath>emerald.cpp</itemPath>
@@ -44,9 +49,19 @@
           <commandLine>-std=c++17</commandLine>
         </ccTool>
       </compileType>
+      <item path="Expr.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Keywords.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Log.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Log.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Scanner.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Scanner.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stmt.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Token.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -77,9 +92,19 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Expr.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Keywords.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Log.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Log.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Scanner.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Scanner.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Stmt.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Token.cpp" ex="false" tool="1" flavor2="0">
       </item>

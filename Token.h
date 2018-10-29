@@ -16,6 +16,7 @@
 
 #include <any>
 #include <string>
+#include <iostream>
 #include "TokenType.h"
 
 class Token {
@@ -29,6 +30,8 @@ public:
     std::any literal;
     int line;
     int column;
+    
+    friend std::ostream& operator<<(std::ostream& Str, const Token& tok);
 private:
     
 };

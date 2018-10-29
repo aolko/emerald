@@ -12,13 +12,21 @@
  */
 
 #include <cstdlib>
+#include <vector>
+#include <iostream>
+#include "Token.h"
 #include "Scanner.h"
-
 /*
  * 
  */
 int main(int argc, char** argv) {
-
+    Scanner scanner = Scanner("if (i == 2):\n\tprint(\"Hello\")\n");
+    std::vector<Token> tokens = scanner.scanTokens();
+    
+    for (int i = 0; i < tokens.size(); i++) {
+        std::cout << tokens[i] << std::endl;
+    }
+    
     return 0;
 }
 
