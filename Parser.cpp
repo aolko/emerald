@@ -13,7 +13,7 @@
 
 #include "Parser.h"
 
-Parser::Parser() {
+Parser::Parser(std::vector<Token> tokens) : tokens(tokens) {
     
 }
 

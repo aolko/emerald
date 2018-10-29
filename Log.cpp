@@ -22,7 +22,7 @@ Log::Log(const Log& orig) {
 Log::~Log() {
 }
 
-void Log::runtimeError(std::exception error) {}
+void Log::runtimeError(RuntimeError error) {}
 void Log::error(int line, std::string message) {
     report(line, 0, "", message, NULL);
 }

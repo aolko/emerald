@@ -17,6 +17,7 @@
 #include <vector>
 #include <string>
 #include "Token.h"
+#include "Errors.h"
 
 class Log {
 public:
@@ -24,7 +25,7 @@ public:
     Log(const Log& orig);
     virtual ~Log();
     
-    static void runtimeError(std::exception error);
+    static void runtimeError(RuntimeError error);
     static void error(int line, std::string message);
     static void error(int line, int column, std::string message);
     static void error(int line, int column, std::string message, std::string lineStr);
