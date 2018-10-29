@@ -13,6 +13,7 @@
       <itemPath>Stmt.h</itemPath>
       <itemPath>Token.h</itemPath>
       <itemPath>TokenType.h</itemPath>
+      <itemPath>Util.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -79,6 +80,8 @@
       </item>
       <item path="TokenType.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Util.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="emerald.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -127,6 +130,8 @@
       <item path="Token.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="TokenType.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Util.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="emerald.cpp" ex="false" tool="1" flavor2="0">
       </item>

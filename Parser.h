@@ -22,6 +22,7 @@
 #include "Stmt.h"
 #include "Expr.h"
 #include "Errors.h"
+#include "Util.h"
 
 class Parser {
 public:

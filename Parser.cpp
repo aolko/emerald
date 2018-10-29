@@ -59,51 +59,147 @@ std::unique_ptr<Stmt> Parser::ifStatement() {
 }
 
 std::vector<std::unique_ptr<Stmt>> Parser::block() {
+    std::vector<std::unique_ptr<Stmt>> statements;
     
+    while (!match({TokenType::DEDENT}) && !isAtEnd()) {
+        std::unique_ptr<Stmt> stmt = declaration();
+        if (stmt) {
+            statements.push_back(std::move(stmt));
+        }
+    }
+    
+    return std::move(statements);
 }
 
 std::unique_ptr<Stmt> Parser::expressionStatement() {
-    
+    std::unique_ptr<Expr> expr = expression();
+    return std::unique_ptr<Stmt>(new Stmt::Expression(std::move(expr)));
 }
 
 std::unique_ptr<Expr> Parser::expression() {
-    
+    return std::move(assignment());
 }
 
 std::unique_ptr<Expr> Parser::assignment() {
+    std::unique_ptr<Expr> expr = bitwise();
     
+    if (match({TokenType::EQUAL})) {
+        Token equals = previous();
+        std::unique_ptr<Expr> value = assignment();
+        
+        if (Util::instanceof<Expr::Variable>(expr.get())) {
+            Token name = dynamic_cast<Expr::Variable*>(expr.get())->name;
+            return std::unique_ptr<Expr>(new Expr::Assign(name, std::move(value)));
+        }
+        
+        error(equals, "Invalid assignment target.");
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::bitwise() {
+    std::unique_ptr<Expr> expr = logical();
     
+    while (match({TokenType::BIT_AND, TokenType::BIT_OR, TokenType::BIT_XOR})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = logical();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::logical() {
+    std::unique_ptr<Expr> expr = equality();
     
+    while (match({TokenType::AND, TokenType::OR})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = equality();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::equality() {
+    std::unique_ptr<Expr> expr = comparison();
     
+    while (match({TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = comparison();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::comparison() {
+    std::unique_ptr<Expr> expr = addition();
     
+    while (match({TokenType::GREATER, TokenType::LESS, TokenType::GREATER_EQUAL, TokenType::LESS_EQUAL, TokenType::SIGN})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = addition();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::addition() {
+    std::unique_ptr<Expr> expr = multiplication();
     
+    while (match({TokenType::PLUS, TokenType::MINUS})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = multiplication();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::multiplication() {
+    std::unique_ptr<Expr> expr = unary();
     
+    while (match({TokenType::SLASH, TokenType::STAR, TokenType::EXPONENT})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = unary();
+        expr = std::unique_ptr<Expr>(new Expr::Binary(std::move(expr), op, std::move(right)));
+    }
+    
+    return std::move(expr);
 }
 
 std::unique_ptr<Expr> Parser::unary() {
+    if (match({TokenType::BANG, TokenType::MINUS})) {
+        Token op = previous();
+        std::unique_ptr<Expr> right = unary();
+        return std::unique_ptr<Expr>(new Expr::Unary(op, std::move(right)));
+    }
     
+    return std::move(primary());
 }
 
 std::unique_ptr<Expr> Parser::primary() {
+    if (match({TokenType::FALSE})) return std::unique_ptr<Expr>(new Expr::Literal(false));
+    if (match({TokenType::TRUE})) return std::unique_ptr<Expr>(new Expr::Literal(true));
+    if (match({TokenType::NIL})) return std::unique_ptr<Expr>(new Expr::Literal(NULL));
     
+    if (match({TokenType::NUMBER, TokenType::STRING})) {
+        return std::unique_ptr<Expr>(new Expr::Literal(previous().literal));
+    }
+    
+    if (match({TokenType::IDENTIFIER})) {
+        return std::unique_ptr<Expr>(new Expr::Variable(previous()));
+    }
+    
+    if (match({TokenType::LEFT_PAREN})) {
+        std::unique_ptr<Expr> expr = expression();
+        consume(TokenType::RIGHT_PAREN, "Expected ')' after expression.");
+        return std::unique_ptr<Expr>(new Expr::Grouping(std::move(expr)));
+    }
+    
+    throw error(peek(), "Expected expression.");
 }
 
 bool Parser::match(std::initializer_list<TokenType> types) {

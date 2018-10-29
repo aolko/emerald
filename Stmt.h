@@ -16,6 +16,8 @@
 #include "Expr.h"
 
 struct Stmt {
+        virtual ~Stmt() = default;
+    
 	template <class R>
 	struct Visitor;
 	struct Block;

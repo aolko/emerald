@@ -15,6 +15,8 @@
 #include "Token.h"
 
 struct Expr {
+        virtual ~Expr() = default;
+    
 	template <class R>
 	struct Visitor;
 	struct Literal;
