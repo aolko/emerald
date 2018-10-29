@@ -6,11 +6,17 @@
  */
 
 
-#include <vector>;
+#ifndef STMT_H
+#define STMT_H
+
+#include <memory>
+#include <vector>
 #include <any>
 #include "Token.h"
+#include "Expr.h"
 
-static struct Stmt {
+struct Stmt {
+	template <class R>
 	struct Visitor;
 	struct Block;
 	struct Var;
@@ -18,7 +24,7 @@ static struct Stmt {
 	struct Expression;
 
 	template <class R>
-	virtual R accept(Visitor<R> visitor) = 0;
+	R accept(Visitor<R> visitor) {};
 };
 
 template <class R>
@@ -29,67 +35,69 @@ struct Stmt::Visitor {
 	virtual R visitExpressionStmt(Stmt::Expression stmt) = 0;
 };
 
-static struct Stmt::Block : public Stmt {
-	List<Stmt> statements;
+struct Stmt::Block : public Stmt {
+	std::vector<std::unique_ptr<Stmt>> statements;
 
-	Block(List<Stmt> statements) {
-		this.statements = statements;
+	Block(std::vector<std::unique_ptr<Stmt>> statements) {
+		this->statements = std::move(statements);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitBlockStmt(*this);
 	}
 };
 
 
-static struct Stmt::Var : public Stmt {
+struct Stmt::Var : public Stmt {
 	Token identifier;
-	Expr value;
+	std::unique_ptr<Expr> value;
 	bool global;
 
-	Var(Token identifier, Expr value, bool global) {
-		this.identifier = identifier;
-		this.value = value;
-		this.global = global;
+	Var(Token identifier, std::unique_ptr<Expr> value, bool global) {
+		this->identifier = identifier;
+		this->value = std::move(value);
+		this->global = global;
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitVarStmt(*this);
 	}
 };
 
 
-static struct Stmt::If : public Stmt {
-	Expr condition;
-	Stmt trueBody;
-	Stmt falseBody;
+struct Stmt::If : public Stmt {
+	std::unique_ptr<Expr> condition;
+	std::unique_ptr<Stmt> trueBody;
+	std::unique_ptr<Stmt> falseBody;
 
-	If(Expr condition, Stmt trueBody, Stmt falseBody) {
-		this.condition = condition;
-		this.trueBody = trueBody;
-		this.falseBody = falseBody;
+	If(std::unique_ptr<Expr> condition, std::unique_ptr<Stmt> trueBody, std::unique_ptr<Stmt> falseBody) {
+		this->condition = std::move(condition);
+		this->trueBody = std::move(trueBody);
+		this->falseBody = std::move(falseBody);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitIfStmt(*this);
 	}
 };
 
 
-static struct Stmt::Expression : public Stmt {
-	Expr expression;
+struct Stmt::Expression : public Stmt {
+	std::unique_ptr<Expr> expression;
 
-	Expression(Expr expression) {
-		this.expression = expression;
+	Expression(std::unique_ptr<Expr> expression) {
+		this->expression = std::move(expression);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitExpressionStmt(*this);
 	}
 };
 
 
+
+#endif /* STMT_H */

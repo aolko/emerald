@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Log.o \
+	${OBJECTDIR}/Parser.o \
 	${OBJECTDIR}/Scanner.o \
 	${OBJECTDIR}/Token.o \
 	${OBJECTDIR}/emerald.o
@@ -69,6 +70,11 @@ ${OBJECTDIR}/Log.o: Log.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Log.o Log.cpp
+
+${OBJECTDIR}/Parser.o: Parser.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Parser.o Parser.cpp
 
 ${OBJECTDIR}/Scanner.o: Scanner.cpp
 	${MKDIR} -p ${OBJECTDIR}

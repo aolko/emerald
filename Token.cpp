@@ -13,6 +13,14 @@
 
 #include "Token.h"
 
+Token::Token() {
+    type = TokenType::END_OF_FILE;
+    lexeme = "";
+    literal = NULL;
+    line = 0;
+    column = 0;
+}
+
 Token::Token(TokenType type, std::string lexeme, std::any literal, int line, int column)
  : type(type), lexeme(lexeme), literal(literal), line(line), column(column)
 {

@@ -6,11 +6,16 @@
  */
 
 
-#include <vector>;
+#ifndef EXPR_H
+#define EXPR_H
+
+#include <memory>
+#include <vector>
 #include <any>
 #include "Token.h"
 
-static struct Expr {
+struct Expr {
+	template <class R>
 	struct Visitor;
 	struct Literal;
 	struct Variable;
@@ -20,7 +25,7 @@ static struct Expr {
 	struct Grouping;
 
 	template <class R>
-	virtual R accept(Visitor<R> visitor) = 0;
+	R accept(Visitor<R> visitor) {};
 };
 
 template <class R>
@@ -33,95 +38,97 @@ struct Expr::Visitor {
 	virtual R visitGroupingExpr(Expr::Grouping expr) = 0;
 };
 
-static struct Expr::Literal : public Expr {
+struct Expr::Literal : public Expr {
 	std::any value;
 
 	Literal(std::any value) {
-		this.value = value;
+		this->value = value;
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitLiteralExpr(*this);
 	}
 };
 
 
-static struct Expr::Variable : public Expr {
+struct Expr::Variable : public Expr {
 	Token name;
 
 	Variable(Token name) {
-		this.name = name;
+		this->name = name;
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitVariableExpr(*this);
 	}
 };
 
 
-static struct Expr::Assign : public Expr {
+struct Expr::Assign : public Expr {
 	Token name;
-	Expr value;
+	std::unique_ptr<Expr> value;
 
-	Assign(Token name, Expr value) {
-		this.name = name;
-		this.value = value;
+	Assign(Token name, std::unique_ptr<Expr> value) {
+		this->name = name;
+		this->value = std::move(value);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitAssignExpr(*this);
 	}
 };
 
 
-static struct Expr::Unary : public Expr {
+struct Expr::Unary : public Expr {
 	Token op;
-	Expr right;
+	std::unique_ptr<Expr> right;
 
-	Unary(Token op, Expr right) {
-		this.op = op;
-		this.right = right;
+	Unary(Token op, std::unique_ptr<Expr> right) {
+		this->op = op;
+		this->right = std::move(right);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitUnaryExpr(*this);
 	}
 };
 
 
-static struct Expr::Binary : public Expr {
-	Expr left;
+struct Expr::Binary : public Expr {
+	std::unique_ptr<Expr> left;
 	Token op;
-	Expr right;
+	std::unique_ptr<Expr> right;
 
-	Binary(Expr left, Token op, Expr right) {
-		this.left = left;
-		this.op = op;
-		this.right = right;
+	Binary(std::unique_ptr<Expr> left, Token op, std::unique_ptr<Expr> right) {
+		this->left = std::move(left);
+		this->op = op;
+		this->right = std::move(right);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitBinaryExpr(*this);
 	}
 };
 
 
-static struct Expr::Grouping : public Expr {
-	Expr expression;
+struct Expr::Grouping : public Expr {
+	std::unique_ptr<Expr> expression;
 
-	Grouping(Expr expression) {
-		this.expression = expression;
+	Grouping(std::unique_ptr<Expr> expression) {
+		this->expression = std::move(expression);
 	}
 
 	template <class R>
-	virtual R accept(R& visitor) {
+	R accept(R& visitor) {
 		return visitor.visitGroupingExpr(*this);
 	}
 };
 
 
+
+#endif /* EXPR_H */
