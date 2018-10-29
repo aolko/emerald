@@ -18,7 +18,7 @@
 #include <string>
 #include "TokenType.h"
 
-static std::map<std::string, TokenType> keywords = {
+static std::map<std::string, TokenType> keywords= {
     {"and", TokenType::AND},
     {"else", TokenType::ELSE},
     {"elsif", TokenType::ELSEIF},

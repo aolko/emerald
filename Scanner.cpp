@@ -135,7 +135,7 @@ void Scanner::scanToken() {
         
         case '!': addToken(match('=') ? TokenType::BANG_EQUAL : TokenType::BANG); break;
         case '=': addToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL); break;
-        case '<': addToken(match('=') ? (match('>') ? TokenType::SIGN : TokenType::LESS_EQUAL) : TokenType::LESS); break;
+        case '<': addToken(match('=') ? (match('>') ? TokenType::SIGN : TokenType::LESS_EQUAL) : (match('<') ? TokenType::APPEND : TokenType::LESS)); break;
         case '>': addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER); break;
         
         case '$': addToken(TokenType::SIGIL); break;
@@ -232,10 +232,8 @@ void Scanner::identifier() {
     
     // See if the identifier is a reserved keyword.
     std::string text = source.substr(start, current);
-    TokenType type = TokenType::IDENTIFIER;
-    if (keywords.count(text) > 0) {
-        type = keywords[text];
-    }
+    TokenType type = keywords.count(text) > 0 ? keywords.at(text) : TokenType::IDENTIFIER;
+    std::cout << text << " " << int(type) << " " << TokenTypeNames[int(type)] << std::endl;
     
     addToken(type);
 }

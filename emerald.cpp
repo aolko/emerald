@@ -18,19 +18,26 @@
 #include "Token.h"
 #include "Scanner.h"
 #include "Parser.h"
+#include "File.h"
+
 /*
  * 
  */
 int main(int argc, char** argv) {
-    Scanner scanner = Scanner(".. ... . if (i == 2):\n\tprint(\"Hello\")\n");
-    std::vector<Token> tokens = scanner.scanTokens();
-    
-    for (int i = 0; i < tokens.size(); i++) {
-        std::cout << tokens[i] << std::endl;
+    if (argc == 2) {
+        std::string file = argv[1];
+        std::string source = File::readFile(file);
+        
+        Scanner scanner = Scanner(source);
+        std::vector<Token> tokens = scanner.scanTokens();
+
+        for (int i = 0; i < tokens.size(); i++) {
+            std::cout << tokens[i] << std::endl;
+        }
+
+        Parser parser(tokens);
+        std::vector<std::unique_ptr<Stmt>> stmts = std::move(parser.parse());
     }
-    
-    Parser parser(tokens);
-    std::vector<std::unique_ptr<Stmt>> stmts = std::move(parser.parse());
     
     return 0;
 }
