@@ -233,7 +233,6 @@ void Scanner::identifier() {
     // See if the identifier is a reserved keyword.
     std::string text = source.substr(start, current);
     TokenType type = keywords.count(text) > 0 ? keywords.at(text) : TokenType::IDENTIFIER;
-    std::cout << text << " " << int(type) << " " << TokenTypeNames[int(type)] << std::endl;
     
     addToken(type);
 }

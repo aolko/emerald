@@ -27,7 +27,7 @@ struct Expr {
 	struct Grouping;
 
 	template <class R>
-	R accept(Visitor<R> visitor) {};
+	R accept(Visitor<R>& visitor) {};
 };
 
 template <class R>
@@ -48,8 +48,8 @@ struct Expr::Literal : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitLiteralExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitLiteralExpr(this);
 	}
 };
 
@@ -64,8 +64,8 @@ struct Expr::Variable : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitVariableExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitVariableExpr(this);
 	}
 };
 
@@ -80,8 +80,8 @@ struct Expr::Assign : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitAssignExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitAssignExpr(this);
 	}
 };
 
@@ -96,8 +96,8 @@ struct Expr::Unary : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitUnaryExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitUnaryExpr(this);
 	}
 };
 
@@ -114,8 +114,8 @@ struct Expr::Binary : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitBinaryExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitBinaryExpr(this);
 	}
 };
 
@@ -128,8 +128,8 @@ struct Expr::Grouping : public Expr {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitGroupingExpr(*this);
+	R accept(Expr::Visitor<R>& visitor) {
+		return visitor.visitGroupingExpr(this);
 	}
 };
 

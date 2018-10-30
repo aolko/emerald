@@ -217,6 +217,8 @@ std::unique_ptr<Expr> Parser::primary() {
         return std::unique_ptr<Expr>(new Expr::Grouping(std::move(expr)));
     }
     
+    if (match({TokenType::COLON})) return nullptr;
+    
     throw error(peek(), "Expected expression.");
 }
 

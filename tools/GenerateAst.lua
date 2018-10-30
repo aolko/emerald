@@ -52,8 +52,8 @@ local function defineType(baseName, className, fieldList)
     io.write"\t}\n\n"
 
     io.write"\ttemplate <class R>\n"
-    io.write"\tR accept(R& visitor) {\n"
-    io.write("\t\treturn visitor.visit" .. className .. baseName .. "(*this);\n")
+    io.write("\tR accept("..baseName.."::Visitor<R>& visitor) {\n")
+    io.write("\t\treturn visitor.visit" .. className .. baseName .. "(this);\n")
     io.write"\t}\n"
 
 
@@ -114,7 +114,7 @@ local function defineAst(outputPath, baseName, types)
     end
 
     io.write"\n\ttemplate <class R>"
-    io.write"\n\tR accept(Visitor<R> visitor) {};\n"
+    io.write"\n\tR accept(Visitor<R>& visitor) {};\n"
 
     io.write"};\n\n"
 

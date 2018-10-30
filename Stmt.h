@@ -25,7 +25,7 @@ struct Stmt {
 	struct Expression;
 
 	template <class R>
-	R accept(Visitor<R> visitor) {};
+	R accept(Visitor<R>& visitor) {};
 };
 
 template <class R>
@@ -43,8 +43,8 @@ struct Stmt::Block : public Stmt {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitBlockStmt(*this);
+	R accept(Stmt::Visitor<R>& visitor) {
+		return visitor.visitBlockStmt(this);
 	}
 };
 
@@ -61,8 +61,8 @@ struct Stmt::If : public Stmt {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitIfStmt(*this);
+	R accept(Stmt::Visitor<R>& visitor) {
+		return visitor.visitIfStmt(this);
 	}
 };
 
@@ -75,8 +75,8 @@ struct Stmt::Expression : public Stmt {
 	}
 
 	template <class R>
-	R accept(R& visitor) {
-		return visitor.visitExpressionStmt(*this);
+	R accept(Stmt::Visitor<R>& visitor) {
+		return visitor.visitExpressionStmt(this);
 	}
 };
 
