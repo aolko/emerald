@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include <any>
 #include "Expr.h"
 #include "Stmt.h"
@@ -23,7 +24,7 @@
 class AstToSource : public Stmt::Visitor<void>, public Expr::Visitor<std::any> {
 public:
     AstToSource();
-    void convert(std::vector<std::unique_ptr<Stmt>> stmts);
+    std::string convert(std::vector<std::unique_ptr<Stmt>> stmts);
     
     void visitBlockStmt(Stmt::Block stmt) override;
     void visitExpressionStmt(Stmt::Expression stmt) override;
@@ -37,9 +38,13 @@ public:
     std::any visitGroupingExpr(Expr::Grouping expr) override;
 private:
     std::vector<std::unique_ptr<Stmt>> stmts;
+    std::string newSrc;
+    int blockLevel = 0;
     
     void execute(std::unique_ptr<Stmt> stmt);
     std::any evaluate(std::unique_ptr<Expr> expr);
+    
+    void indentLine();
 };
 
 #endif /* ASTTOSOURCE_H */
