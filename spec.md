@@ -79,7 +79,7 @@ print "I'm printing!"
 3 & 5 #and
 3 | 5 #or
 3 ^ 5 #xor
-3 ~ 5 #not
+~ 5 #not
 ```
 ```
 nil
