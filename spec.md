@@ -145,6 +145,32 @@ MyModule.Hi("World")
 #=> Hi, World
 ```
 
+You can also import all of the functions
+
+```
+import "MyModule.*"
+
+MyModule.Hi("World")
+#=> Hi, World
+```
+
+...Or some of them
+
+```
+import "MyModule.Hi"
+
+MyModule.Hi("World")
+#=> Hi, World
+```
+
+```
+from "MyModule" import "*"
+
+MyModule.Hi("World")
+#=> Hi, World
+```
+
+
 You can also namespace your modules
 ```
 Module "MyModule.Math"
