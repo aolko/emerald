@@ -11,4 +11,4 @@ Take a peek at our progress graph
 
 ## Contact
 
-You can chat with us on our [discord server](https://discord.gg/HtEPRX)
+You can chat with us on our [discord server](https://discordapp.com/invite/km4d79B)
