@@ -11,6 +11,8 @@ public class Emerald
 {
 	private static boolean hadError = false;
 	private static boolean hadRuntimeError = false;
+	private static Interpreter interpreter = new Interpreter();
+	private static Compiler compiler = new Compiler();
 	
 	public static void main(String[] args) throws IOException {
 		if (args.length > 1) {
@@ -47,21 +49,18 @@ public class Emerald
 		Scanner scanner = new Scanner(source);
 		List<Token> tokens = scanner.scanTokens();
 		
-		for (Token token : tokens) {
-			System.out.println(token);
-		}
+		Parser parser = new Parser(tokens);
+		List<Stmt> statements = parser.parse();
 		
-//		Parser parser = new Parser(tokens);
-//		List<Stmt> statements = parser.parse();
-//		
-//		// Stop if there was a syntax error.
-//		if (hadError) return;
-//		
-//		interpreter.interpret(statements);
+		// Stop if there was a syntax error.
+		if (hadError) return;
+		
+		interpreter.interpret(statements);
 	}
 	
 	static void runtimeError(RuntimeError error) {
 		System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+		error.printStackTrace(System.err);
 		hadRuntimeError = true;
 	}
 	

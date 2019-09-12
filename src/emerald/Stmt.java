@@ -10,12 +10,18 @@ package emerald;
 
 import java.util.List;
 
+import emerald.Expr.Visitor;
+import emerald.Interpreter.ReturnThrow;
+
 abstract class Stmt {
 	interface Visitor<R> {
 		R visitExpressionStmt(Expression stmt);
-		R visitBlockStmt(Block stmt);
+		R visitBlockStmt(Block stmt) throws ReturnThrow;
 		R visitVarStmt(Var stmt);
-		R visitIfStmt(If stmt);
+		R visitIfStmt(If stmt) throws ReturnThrow;
+		void visitReturnStmt(Return stmt) throws ReturnThrow;
+		void visitPrintStmt(Expr value);
+		void visitFunctionStmt(Func func);
 	}
 
 	static class Expression extends Stmt {
@@ -30,6 +36,31 @@ abstract class Stmt {
 		}
 	}
 
+	static class Print extends Stmt {
+		final Expr value;
+		
+		Print(Expr value) {
+			this.value = value;
+		}
+		
+		<R> R accept(Visitor<R> visitor) {
+			visitor.visitPrintStmt(value);
+			return null;
+		}
+	}
+	
+	static class Return extends Stmt {
+		final Expr value;
+		
+		Return(Expr value) {
+			this.value = value;
+		}
+		
+		<R> R accept(Visitor<R> visitor) throws ReturnThrow {
+			visitor.visitReturnStmt(this);
+			return null;
+		}
+	}
 
 	static class Block extends Stmt {
 		final List<Stmt> statements;
@@ -38,11 +69,27 @@ abstract class Stmt {
 			this.statements = statements;
 		}
 
-		<R> R accept(Visitor<R> visitor) {
+		<R> R accept(Visitor<R> visitor) throws ReturnThrow {
 			return visitor.visitBlockStmt(this);
 		}
 	}
 
+	static class Func extends Stmt {
+		final String name;
+		final List<String> arguments;
+		final Block body;
+
+		Func(String name, List<String> arguments, Block body) {
+			this.name = name;
+			this.arguments =  arguments;
+			this.body = body;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			visitor.visitFunctionStmt(this);
+			return null;
+		}
+	}
 
 	static class Var extends Stmt {
 		final Token identifier;
@@ -72,12 +119,10 @@ abstract class Stmt {
 			this.falseBody = falseBody;
 		}
 
-		<R> R accept(Visitor<R> visitor) {
+		<R> R accept(Visitor<R> visitor) throws ReturnThrow {
 			return visitor.visitIfStmt(this);
 		}
 	}
 
-
-
-	abstract <R> R accept(Visitor<R> visitor);
+	abstract <R> R accept(Visitor<R> visitor) throws ReturnThrow;
 }

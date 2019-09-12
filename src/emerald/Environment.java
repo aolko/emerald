@@ -6,6 +6,8 @@ import java.util.Map;
 public class Environment {
 	final Environment enclosing;
 	private final Map<String, Object> values = new HashMap<>();
+	private final Map<String, Function> functions = new HashMap<>();
+	public Expr lastReturn = null;
 	
 	Environment() {
 		enclosing = null;
@@ -32,7 +34,7 @@ public class Environment {
 		}
 		
 		if (enclosing != null) {
-			enclosing.assign(name, value);
+			enclosing.values.put(name.lexeme, value);
 			return;
 		}
 		
@@ -41,5 +43,37 @@ public class Environment {
 	
 	void define(String name, Object value) {
 		values.put(name, value);
+	}
+	
+	void defineFunc(Function func) {
+		functions.put(func.name, func);
+	}
+	
+	Function getFunc(String name) {
+		Function func = functions.get(name);
+		
+		if (func == null) {
+			if (enclosing != null)
+				return enclosing.getFunc(name);
+			
+			return null;
+		}
+		
+		return func;
+	}
+	
+	/**
+	 * Assigns a variable or defines it if it does not exist
+	 * @param name
+	 * @param value
+	 */
+	void set(Token name, Object value) {
+		try {
+			get(name);
+			assign(name, value);
+		}
+		catch (RuntimeError e) {
+			define(name.lexeme, value);
+		}
 	}
 }
