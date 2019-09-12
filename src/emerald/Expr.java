@@ -10,7 +10,13 @@ package emerald;
 
 import java.util.List;
 
+import emerald.Expr.Visitor;
+
 abstract class Expr {
+	/**
+	 * Visitor interface
+	 * @param <R> The type that should be returned visiting expressions
+	 */
 	interface Visitor<R> {
 		R visitGroupingExpr(Grouping expr);
 		R visitLiteralExpr(Literal expr);
@@ -18,6 +24,8 @@ abstract class Expr {
 		R visitUnaryExpr(Unary expr);
 		R visitAssignExpr(Assign expr);
 		R visitBinaryExpr(Binary expr);
+		R visitFixExpr(Fix expr);
+		R visitCallExpr(Call call);
 	}
 
 	static class Grouping extends Expr {
@@ -72,7 +80,25 @@ abstract class Expr {
 			return visitor.visitUnaryExpr(this);
 		}
 	}
+	
+	/**
+	 * Prefix and Postfix
+	 */
+	static class Fix extends Expr {
+		final Token operator;
+		final Token target;
+		final Boolean prefix;
 
+		Fix(Token operator, Token target, Boolean prefix) {
+			this.operator = operator;
+			this.target = target;
+			this.prefix = prefix;
+		}
+
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitFixExpr(this);
+		}
+	}
 
 	static class Assign extends Expr {
 		final Token name;
@@ -105,7 +131,24 @@ abstract class Expr {
 		}
 	}
 
+	static class Call extends Expr {
+		final String name;
+		final List<Expr> arguments;
 
+		Call(String name, List<Expr> arguments) {
+			this.name = name;
+			this.arguments =  arguments;
+		}
 
+		<R> R accept(Visitor<R> visitor) {
+			return visitor.visitCallExpr(this);
+		}
+	}
+
+	/**
+	 * Forces {@literal visitor} to visit this expression
+	 * @param visitor The visitor to visit this expression
+	 * @return The type of value that this expression should resolve to
+	 */
 	abstract <R> R accept(Visitor<R> visitor);
 }

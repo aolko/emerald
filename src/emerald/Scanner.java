@@ -42,6 +42,7 @@ public class Scanner
 		keywords.put("true",     TRUE);
 		keywords.put("var",      VAR);
 		keywords.put("while",    WHILE);
+		keywords.put("end",      END);
 	}
 	
 	Scanner(String source) {
@@ -148,8 +149,24 @@ public class Scanner
 					addToken(DOT);
 				}
 				break;
-			case '-': addToken(MINUS); break;
-			case '+': addToken(PLUS); break;
+			case '-':
+				if (peek() == '-') {
+					advance();
+					addToken(MINUS_MINUS);
+					break;
+				}
+
+				addToken(MINUS);
+				break;
+			case '+':
+				if (peek() == '+') {
+					advance();
+					addToken(PLUS_PLUS);
+					break;
+				}
+				
+				addToken(PLUS);
+				break;
 			case '^': addToken(BIT_XOR); break;
 			case '&': addToken(match('&') ? AND : BIT_AND); break;
 			case '|': addToken(match('|') ? OR : BIT_OR); break;
