@@ -1,0 +1,44 @@
+# this is a testing source file of emerald programming language
+
+# single-line comment - ignored by compiler
+
+// java-like single-line comment
+
+/*               this is ignored too
+    multi-line comment, everything between those 2 * will be ignored
+*/
+
+/#
+    another type of comment
+#/
+
+    Module "Emerald.Example.Čaj"
+// package (Emerald.Example) and name of module (Čaj), package and module names can use unicode characters from table UTF-8mb4 minus
+//                              double quotes and white characters regex-> [^\s"]* (this is probably not final)
+
+Import "Emerald.Math"
+Import "Emerald.Collections.List"
+Import "مرحباياعالم"
+// importing modules
+
+           global_var           = "I'm a global variable!"
+           // defining a variable in global scope must be done AFTER imports and BEFORE functions, just like in Pascal, or not? idk
+π = 3.14
+another_global_var = false
+// global variables can use unicode, too!
+// But please, don't use special characters that are only available from Character Map or other non-keyboard sources in public projects too often
+// especially in function names of public libraries, no one wants to use your "œżƧǅ"-kind of modules
+
+// functions start with keyword 'fn' followed by function name and round brackets in which you can type parameters of given function
+
+//fn FuntionGetPi():
+    return π // return statement consists of the 'return' keyword followed by an expression
+end
+// there are currently no typing conventions
+fn Fact(number , slave , index , gegf):
+    if number == 1:
+        return 1 // simple primitive return statement
+    end
+
+    return number * fact(number - 1) // return statement with an expression
+end
